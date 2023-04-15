@@ -110,10 +110,6 @@ public:
     Polynomial &operator*=(Polynomial const& lhs){
         //we create a holder map to replace the map in the implicit variable
         Polynomial newMap{};
-        
-        //copy map into 
-        // std::map<int, int> a{this->polynom};
-
 
         for(auto & i : this->polynom){
             for (auto & j : lhs.polynom){
@@ -126,6 +122,7 @@ public:
         this->polynom.clear();
         //we can use the std::map() copy constructer to copy the newMap back into our this pointer and our polynom member;
         this->polynom = std::map<int,int>(newMap.polynom);
+        //probably more memory efficient way of doing this.
     return *this;
     }
 };
@@ -149,6 +146,12 @@ Polynomial operator-(Polynomial const &rhs, Polynomial const &lhs)
 {
     Polynomial lhsi{lhs};
     lhsi -= rhs;
+    return lhsi;
+}
+Polynomial operator*(Polynomial const &rhs, Polynomial const &lhs)
+{
+    Polynomial lhsi{lhs};
+    lhsi *= rhs;
     return lhsi;
 }
 
