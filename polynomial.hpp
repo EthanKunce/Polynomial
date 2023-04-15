@@ -109,18 +109,27 @@ public:
 
     //Broken
     Polynomial &operator*=(Polynomial const& lhs){
+        //we create a holder map to replace the map in the implicit variable
+        Polynomial newMap{};
+        
+        //copy map into 
+        // std::map<int, int> a{this->polynom};
 
-        std::map<int, int> a{this->polynom};
-        for(auto & i : a){
+
+        for(auto & i : this->polynom){
             for (auto & j : lhs.polynom){
-                this->polynom[i.first + j.first] = this->polynom.find(i.first)->second * lhs.polynom.find(j.first)->second;
+                // this->polynom[i.first + j.first] = this->polynom.find(i.first)->second * lhs.polynom.find(j.first)->second;
+                newMap += Polynomial{i.first + j.first, this->polynom.find(i.first)->second * lhs.polynom.find(j.first)->second};
+                if(i.first + j.first > this->degree) this->degree = i.first + j.first;
             }
         }
 
+        this->polynom.clear();
+        this->polynom = std::map<int,int>(newMap.polynom);
     return *this;
     }
 };
-//for some reason I can't call pTo_string() on const Polynomials, I also can't build the string in 
+//for some reason I can't call pTo_string() on const Polynomials, I also can't build the string in the function, as this function does not have access to private memebers of m
 // std::ostream& operator<<(std::ostream& os ,Polynomial const& m){
 std::ostream& operator<<(std::ostream& os, Polynomial m){
     // auto i =  m.pTo_string();
