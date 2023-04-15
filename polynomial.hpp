@@ -40,20 +40,19 @@ public:
         for (auto d : this->polynom)
         {
             // int c = this->polynom.find(d.first);
-            int c = this->polynom.find(d.first)->second;
+            int c = d.second;
 
             if (d.first == 0)
             {
                 temp += (std::to_string(c));
             }
-            else if (d.second == 1 || d.second == -1)
-            {
-                
-                temp += d.second == -1 ? ("-x" + std::to_string(d.first)) : ("x" + std::to_string(d.first));
+            else if(d.first > 1){
+                // if coefficient is 1, then print x(degree) otherwise check if coefficent is -1, then print -x(degree) otherwise print coefficient(x)degree
+                temp += c == 1 ? "x" + std::to_string(d.first) : c == -1 ? "-x" + std::to_string(d.first) : std::to_string(c) + "x" + std::to_string(d.first);
+                //really ugly.
             }
-            else
-            {
-                temp += (std::to_string(c) + "x" + std::to_string(d.first));
+            else{
+                temp += (std::to_string(c) + "x");
             }
 
             if (d.first < this->degree)
@@ -107,7 +106,7 @@ public:
     }
 
 
-    //Broken
+    
     Polynomial &operator*=(Polynomial const& lhs){
         //we create a holder map to replace the map in the implicit variable
         Polynomial newMap{};
@@ -123,8 +122,9 @@ public:
                 if(i.first + j.first > this->degree) this->degree = i.first + j.first;
             }
         }
-
+        //we can delete our current map and erase any of the previous values
         this->polynom.clear();
+        //we can use the std::map() copy constructer to copy the newMap back into our this pointer and our polynom member;
         this->polynom = std::map<int,int>(newMap.polynom);
     return *this;
     }
